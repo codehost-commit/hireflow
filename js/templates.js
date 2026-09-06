@@ -388,36 +388,33 @@ function tCreative(r, accent) {
   const c = accent || '#ec4899';
   const p = r.personal;
   const st = customizeStyleAttr(r.customize, r._marginsKey);
+  const contact = [p.email, p.phone, p.location, p.linkedin, p.website].filter(Boolean);
   return `
     <style>
-      .t-creative { font-family: var(--app-font); color: #1f2937; min-height: var(--app-page-h, 1048px); display: grid; grid-template-columns: 35% 65%; grid-template-rows: 1fr; }
-      .t-creative .sidebar { background: ${c}; color: #fff; padding: calc(5% * var(--app-margin, 1)) calc(6% * var(--app-margin, 1)); }
-      .t-creative .name { font-size: 180%; font-weight: 700; line-height: 1.1; margin-bottom: 5%; }
-      .t-creative .sidebar h3 { font-size: 90%; text-transform: var(--app-upper, uppercase); letter-spacing: .12em; margin: calc(6% * var(--app-space, 1)) 0 2%; opacity: .9; }
-      .t-creative .sidebar .item { font-size: 80%; margin-bottom: 1%; opacity: .95; }
-      .t-creative .main { padding: calc(5% * var(--app-margin, 1)) calc(6% * var(--app-margin, 1)); }
-      .t-creative h2 { color: ${c}; font-size: 110%; font-weight: 700; text-transform: var(--app-upper, uppercase); letter-spacing: .08em; margin: calc(4% * var(--app-space, 1)) 0 calc(2% * var(--app-space, 1)); }
+      .t-creative { font-family: var(--app-font); color: #1f2937; height: 100%; }
+      .t-creative .cr-header { background: ${c}; color: #fff; padding: calc(5% * var(--app-margin, 1)) calc(7% * var(--app-margin, 1)) calc(4% * var(--app-margin, 1)); }
+      .t-creative .cr-name { font-size: 220%; font-weight: 800; letter-spacing: -.01em; line-height: 1.05; }
+      .t-creative .cr-contact { font-size: 82%; margin-top: 8px; opacity: .92; }
+      .t-creative .cr-contact span:not(:last-child)::after { content: "  ·  "; opacity: .6; }
+      .t-creative .cr-body { padding: calc(4% * var(--app-margin, 1)) calc(7% * var(--app-margin, 1)); }
+      .t-creative h2 { color: ${c}; font-size: 104%; font-weight: 800; text-transform: var(--app-upper, uppercase); letter-spacing: .1em; margin: calc(3.6% * var(--app-space, 1)) 0 calc(1.6% * var(--app-space, 1)); padding-bottom: 4px; border-bottom: 2px solid ${c}22; }
       .t-creative h2:first-child { margin-top: 0; }
-      .t-creative .t-entry { margin-bottom: calc(3% * var(--app-space, 1)); padding-left: 3%; border-left: 2px solid ${c}44; }
-      .t-creative .t-entry-head { display:flex; justify-content:space-between; font-weight: 600; font-size: 92%; }
-      .t-creative .t-entry-sub { color: #4b5563; font-style: italic; font-size: 82%; }
-      .t-creative .t-entry-desc { font-size: 86%; margin-top: 1%; }
-      .t-creative .summary { font-size: 88%; }
+      .t-creative .t-entry { margin-bottom: calc(2.8% * var(--app-space, 1)); padding-left: 12px; border-left: 3px solid ${c}55; }
+      .t-creative .t-entry-head { display:flex; justify-content:space-between; align-items: baseline; font-weight: 700; font-size: 96%; }
+      .t-creative .t-entry-date { font-weight: 400; font-size: 87%; color: #6b7280; white-space: nowrap; padding-left: 4%; }
+      .t-creative .t-entry-sub { color: #4b5563; font-style: italic; font-size: 90%; }
+      .t-creative .t-entry-desc, .t-creative .summary { font-size: 91%; }
+      .t-creative .t-bullets { font-size: 91%; }
+      .t-creative .t-bullets li::before { color: ${c}; opacity: 1; }
     </style>
     <div class="t-creative" style="${st}">
-      <div class="sidebar">
-        <div class="name">${esc(p.fullName)}</div>
-        <h3>Contact</h3>
-        ${p.email?`<div class="item">${esc(p.email)}</div>`:''}
-        ${p.phone?`<div class="item">${esc(p.phone)}</div>`:''}
-        ${p.location?`<div class="item">${esc(p.location)}</div>`:''}
-        ${p.linkedin?`<div class="item">${esc(p.linkedin)}</div>`:''}
-        ${skillsLine(r.skills)?`<h3>Skills</h3><div class="item">${skillsLine(r.skills)}</div>`:''}
-        ${r.education.length?`<h3>Education</h3>${r.education.map(e=>`<div class="item"><strong>${esc(e.school)}</strong><br>${esc(e.degree)} ${esc(e.field)}</div>`).join('')}`:''}
+      <div class="cr-header">
+        <div class="cr-name">${esc(p.fullName)}</div>
+        ${contact.length ? `<div class="cr-contact">${contact.map(c2 => `<span>${esc(c2)}</span>`).join('')}</div>` : ''}
       </div>
-      <div class="main">
-        ${p.summary?`<h2>About</h2><div class="summary">${esc(p.summary)}</div>`:''}
-        ${orderedBody(r, {only: MAIN_COLUMN_KEYS})}
+      <div class="cr-body">
+        ${p.summary?`<h2>Summary</h2><div class="summary">${esc(p.summary)}</div>`:''}
+        ${orderedBody(r)}
       </div>
     </div>`;
 }

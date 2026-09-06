@@ -2191,10 +2191,14 @@ async function runAI(env, system, user, opts = {}) {
 
 // Streaming variant of runAI — returns a ReadableStream of SSE chunks.
 // Each chunk is `data: <token>\n\n`; the stream ends with `data: [DONE]\n\n`.
-// Falls back to non-streaming (emits the full text as one chunk) if the model
-// doesn't support streaming or returns a non-stream response.
+// Tries FAST_MODEL first, then falls back to SMART_MODEL if streaming fails or
+// yields nothing. If both streaming attempts fail, falls back to non-streaming
+// runAI (which has its own model-fallback chain). This mirrors runAI's
+// resilience so a single flaky model can't take down all streaming AI.
 async function runAIStream(env, system, user, opts = {}) {
-  const model = opts.model || FAST_MODEL;
+  const wanted = opts.model || FAST_MODEL;
+  const other = wanted === FAST_MODEL ? SMART_MODEL : FAST_MODEL;
+  const chain = [wanted, other];
   const payload = {
     messages: [{ role: "system", content: system }, { role: "user", content: user }],
     max_tokens: opts.max_tokens || 800,
@@ -2208,25 +2212,44 @@ async function runAIStream(env, system, user, opts = {}) {
   const done = () => { writer.write(enc.encode("data: [DONE]\n\n")); writer.close(); };
 
   (async () => {
-    try {
-      const res = await env.AI.run(model, payload);
-      // Workers AI streaming returns an EventStream. When stream:true the result
-      // is itself async-iterable. Fall back gracefully if it isn't.
-      if (res && typeof res[Symbol.asyncIterator] === "function") {
-        for await (const part of res) {
-          const token = part && (part.response || (part.choices && part.choices[0] && part.choices[0].delta && part.choices[0].delta.content) || "");
-          if (token) await send(token);
+    let lastErr;
+    // Try each model in the chain. Success = we emitted at least one token or
+    // fell back inline to a full text response. Failure = throw or empty stream.
+    for (const model of chain) {
+      try {
+        const res = await env.AI.run(model, payload);
+        let emitted = false;
+        if (res && typeof res[Symbol.asyncIterator] === "function") {
+          for await (const part of res) {
+            const token = part && (part.response || (part.choices && part.choices[0] && part.choices[0].delta && part.choices[0].delta.content) || "");
+            if (token) { await send(token); emitted = true; }
+          }
+        } else {
+          // Non-streaming response from this model: emit full text as one chunk.
+          const text = _aiText(res).trim();
+          if (text) { await send(text); emitted = true; }
         }
-      } else {
-        // Non-streaming fallback: emit the full text as one chunk.
-        const text = _aiText(res).trim();
-        if (text) await send(text);
+        if (emitted) { done(); return; }
+        // Empty response — try the next model.
+        lastErr = new Error(`${model} returned empty stream`);
+        console.error(`AI stream ${model} empty response, falling back`);
+      } catch (e) {
+        lastErr = e;
+        console.error(`AI stream ${model} failed, falling back:`, e.message || e);
       }
-      done();
-    } catch (e) {
-      await writer.write(enc.encode(`data: ${JSON.stringify({ error: e.message || "AI error" })}\n\n`));
-      writer.close();
     }
+    // Both streaming models failed. Last-resort: try non-streaming runAI, which
+    // has its own model-fallback chain and different gateway attempts.
+    try {
+      const text = await runAI(env, system, user, opts);
+      if (text) { await send(text); done(); return; }
+    } catch (e) { lastErr = e; }
+
+    // Everything failed. Emit an error the client can classify.
+    const msg = (lastErr && (lastErr.message || String(lastErr))) || "AI error";
+    await writer.write(enc.encode(`data: ${JSON.stringify({ error: msg })}\n\n`));
+    writer.write(enc.encode("data: [DONE]\n\n"));
+    writer.close();
   })();
 
   return readable;
