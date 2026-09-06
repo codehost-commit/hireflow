@@ -1,0 +1,190 @@
+/* ==========================================================================
+   magic.css — Vanilla-CSS ports of Magic UI motion effects.
+   All utilities opt-in via class names, all respect prefers-reduced-motion.
+
+     .magic-aurora            Animated gradient text
+     .magic-aurora--applio    Applio-brand palette variant
+     .magic-border-beam       Animated conic-gradient border on parent
+     .magic-border-beam--applio
+     .magic-shimmer           Sweeping highlight across a button
+     .magic-shine-border      Static gradient border, no motion
+     .magic-dot-pattern       Radial-dot background
+     .magic-grid-pattern      Grid-line background
+     .magic-marquee           Infinite horizontal scroll wrapper
+     .magic-meteors           Falling meteor lines (absolute inside relative)
+     .magic-glow              Soft accent glow behind an element
+     .magic-pulse             Slow pulsing ring on primary CTA
+     .magic-shine-text        Sweeping shine across text
+     .magic-bento             Subtle hover raise + accent border
+   ========================================================================== */
+
+/* 1. Aurora text */
+.magic-aurora {
+  display: inline-block;
+  background-image: linear-gradient(135deg, #ff0080 0%, #7928ca 25%, #0070f3 50%, #38bdf8 75%, #ff0080 100%);
+  background-size: 200% 200%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: magic-aurora-shift 10s ease-in-out infinite;
+}
+@keyframes magic-aurora-shift {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+.magic-aurora--applio {
+  background-image: linear-gradient(135deg, #a5b4fc 0%, #5b54e8 30%, #38bdf8 55%, #a5b4fc 100%);
+}
+
+/* 2. Border beam — parent must be position:relative + overflow:hidden */
+.magic-border-beam {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  padding: 1.5px;
+  background: conic-gradient(from 0deg, transparent 0deg, transparent 300deg, #ffaa40 340deg, #9c40ff 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  animation: magic-beam-spin 6s linear infinite;
+}
+.magic-border-beam--applio {
+  background: conic-gradient(from 0deg, transparent 0deg, transparent 300deg, #5b54e8 340deg, #a5b4fc 360deg);
+}
+@keyframes magic-beam-spin { to { transform: rotate(360deg); } }
+
+/* 3. Shimmer sweep across a button/card */
+.magic-shimmer { position: relative; overflow: hidden; isolation: isolate; }
+.magic-shimmer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(100deg, transparent 20%, rgba(255,255,255,.28) 40%, rgba(255,255,255,.55) 50%, rgba(255,255,255,.28) 60%, transparent 80%);
+  transform: translateX(-100%);
+  animation: magic-shimmer-slide 2.6s ease-in-out infinite;
+}
+@keyframes magic-shimmer-slide {
+  0% { transform: translateX(-100%); }
+  60%, 100% { transform: translateX(100%); }
+}
+
+/* 4. Static shine border */
+.magic-shine-border { position: relative; isolation: isolate; }
+.magic-shine-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255,255,255,.35), rgba(255,255,255,0) 40%, rgba(91,84,232,.35));
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+}
+
+/* 5. Dot pattern */
+.magic-dot-pattern { background-image: radial-gradient(circle, rgba(255,255,255,.08) 1px, transparent 1px); background-size: 24px 24px; }
+.magic-dot-pattern--light { background-image: radial-gradient(circle, rgba(15,23,42,.08) 1px, transparent 1px); }
+
+/* 6. Grid pattern */
+.magic-grid-pattern {
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+/* 7. Marquee — duplicate content in HTML for a seamless loop */
+.magic-marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+.magic-marquee-track { display: flex; gap: 32px; width: max-content; animation: magic-marquee-slide 40s linear infinite; }
+.magic-marquee:hover .magic-marquee-track { animation-play-state: paused; }
+@keyframes magic-marquee-slide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* 8. Meteors — falling streaks inside position:relative container */
+.magic-meteors { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.magic-meteors::before,
+.magic-meteors::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: 0;
+  width: 100%;
+  height: 200%;
+  background-image:
+    radial-gradient(1.5px 60px at 15% 20%, rgba(255,255,255,.9), transparent 60%),
+    radial-gradient(1.5px 80px at 55% 40%, rgba(165,180,252,.8), transparent 60%),
+    radial-gradient(1px 40px at 85% 10%, rgba(255,255,255,.7), transparent 60%),
+    radial-gradient(1.5px 100px at 25% 70%, rgba(147,197,253,.7), transparent 60%),
+    radial-gradient(1.5px 70px at 75% 60%, rgba(255,255,255,.85), transparent 60%);
+  background-repeat: no-repeat;
+  transform: rotate(215deg);
+  animation: magic-meteor-fall 8s linear infinite;
+  opacity: .5;
+}
+.magic-meteors::after { animation-delay: 4s; animation-duration: 12s; opacity: .35; }
+@keyframes magic-meteor-fall {
+  0%   { transform: rotate(215deg) translateY(-30%); opacity: 0; }
+  20%  { opacity: 1; }
+  100% { transform: rotate(215deg) translateY(30%); opacity: 0; }
+}
+
+/* 9. Soft accent glow */
+.magic-glow { position: relative; isolation: isolate; }
+.magic-glow::after {
+  content: "";
+  position: absolute;
+  inset: -20% -10%;
+  z-index: -1;
+  background: radial-gradient(60% 60% at 50% 50%, rgba(91,84,232,.35), transparent 70%);
+  filter: blur(28px);
+  pointer-events: none;
+}
+
+/* 10. Pulsing ring for primary CTAs */
+.magic-pulse { animation: magic-cta-pulse 2.8s ease-in-out infinite; }
+@keyframes magic-cta-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(91,84,232,.45); }
+  50%      { box-shadow: 0 0 0 14px rgba(91,84,232,0); }
+}
+
+/* 11. Sweeping shine across text */
+.magic-shine-text {
+  background: linear-gradient(110deg, var(--shine-base, #a5b4fc) 45%, rgba(255,255,255,.95) 55%, var(--shine-base, #a5b4fc) 65%);
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: magic-shine-slide 3.5s linear infinite;
+}
+@keyframes magic-shine-slide { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+
+/* 12. Bento hover — subtle raise + accent border */
+.magic-bento { transition: transform .28s cubic-bezier(.2,.9,.3,1.2), border-color .18s, box-shadow .28s; }
+.magic-bento:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent, #5b54e8);
+  box-shadow: 0 10px 30px -12px rgba(91,84,232,.35);
+}
+
+/* Reduced-motion guard */
+@media (prefers-reduced-motion: reduce) {
+  .magic-aurora,
+  .magic-border-beam,
+  .magic-shimmer::before,
+  .magic-marquee-track,
+  .magic-meteors::before,
+  .magic-meteors::after,
+  .magic-pulse,
+  .magic-shine-text { animation: none !important; }
+  .magic-aurora { background-position: 25% 50%; }
+  .magic-shine-text { background-position: 50% 0; color: var(--shine-base, #a5b4fc); -webkit-text-fill-color: currentColor; }
+}
