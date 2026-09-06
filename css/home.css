@@ -821,12 +821,10 @@
 .feat-card:hover .feat-violet  { box-shadow: 0 6px 20px rgba(99,102,241,.5); }
 .feat-card:hover .feat-emerald { box-shadow: 0 6px 20px rgba(20,184,166,.5); }
 
-/* ── Pricing featured card: animated pulse border ── */
-@keyframes pulse-border {
-  0%,100% { box-shadow: 0 20px 50px rgba(99,102,241,.2), 0 0 0 2px #4f46e5; }
-  50%      { box-shadow: 0 28px 60px rgba(139,92,246,.35), 0 0 0 2.5px #8b5cf6; }
+/* ── Pricing featured card: static premium treatment (no motion) ── */
+.price-card.featured {
+  box-shadow: 0 24px 60px -12px rgba(99,102,241,.35), 0 0 0 1.5px #6366f1;
 }
-.price-card.featured { animation: pulse-border 3s ease-in-out infinite; }
 
 /* ── Testimonial: large decorative quote mark ── */
 .tcard { position: relative; overflow: hidden; }
