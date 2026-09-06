@@ -29,6 +29,7 @@ Ramp, grow, and get paid (the career copilot):
 - Free Resume Job Match (https://appliohq.com/tools/resume-job-match): match your resume against any job description to find keyword gaps. No sign-up.
 - Free Resume Proofreader (https://appliohq.com/tools/resume-proofreader): checks for common errors, weak verbs, tense inconsistencies, and buzzwords. No sign-up.
 - Free Resume Bullet Generator (https://appliohq.com/tools/resume-bullet-generator): turn weak bullets into strong, quantified, ATS-friendly bullet points with AI.
+- Free Resume Bullet Examples Library (https://appliohq.com/tools/resume-bullet-examples): 250+ proven, quantified resume bullets organized by 15 roles (software engineer, product manager, data scientist, marketing manager, sales, RN, teacher, more). Searchable and copyable.
 - Free Resume Summary Generator (https://appliohq.com/tools/resume-summary-generator): write a compelling 2-3 sentence professional summary tailored to your role and experience.
 - Free Resume Skills Generator (https://appliohq.com/tools/resume-skills-generator): identify the right skills to list for any job by pasting the job description.
 - Free Resume Tailoring Tool (https://appliohq.com/tools/resume-tailor): rewrite your resume for a specific job in seconds, without fabricating experience.
