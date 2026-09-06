@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex,nofollow">
+<title>Template preview generator</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #fff; }
+  /* Exactly matches the US Letter page dimensions used by the resume-templates
+     preview iframes (816x1056px at 96dpi). The screenshot script targets this
+     exact box, so what you see here is what the PNG captures. */
+  #page {
+    width: 816px;
+    height: 1056px;
+    overflow: hidden;
+    background: #fff;
+    box-sizing: border-box;
+  }
+</style>
+</head>
+<body>
+<div id="page"></div>
+
+<script src="/js/icons.js"></script>
+<script src="/js/templates.js"></script>
+<script>
+// Render the template named by ?tpl=xxx into #page, sized exactly like the
+// export preview. This page is called by scripts/generate-template-previews.mjs
+// via Playwright — it is not linked from the site, is noindex, and is
+// disallowed in robots.txt.
+(function () {
+  var params = new URLSearchParams(window.location.search);
+  var tpl = params.get('tpl') || 'harvard';
+  var accent = params.get('accent') || '#6366f1';
+  try {
+    var html = renderTemplate(tpl, {}, false, accent);
+    // Use an iframe so template <style> blocks stay isolated from this
+    // page's styles (mirrors how the real app renders each template).
+    var iframe = document.createElement('iframe');
+    iframe.style.cssText = 'width:816px;height:1056px;border:0;display:block;';
+    iframe.setAttribute('aria-label', tpl + ' template preview');
+    document.getElementById('page').appendChild(iframe);
+    writeResumeFrame(iframe, html, 816);
+    // Signal readiness so the Playwright script can screenshot deterministically.
+    window.__previewReady = true;
+    document.title = 'Ready: ' + tpl;
+  } catch (e) {
+    document.title = 'Error: ' + (e && e.message || 'render failed');
+    window.__previewError = String(e && e.message || e);
+  }
+})();
+</script>
+</body>
+</html>

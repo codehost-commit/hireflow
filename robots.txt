@@ -21,6 +21,8 @@ Disallow: /first-90-days
 Disallow: /autopilot
 Disallow: /testimonial
 Disallow: /email-preferences
+# Internal renderer used by the template PNG generator script — no user value
+Disallow: /preview-shot
 # Operational data, never for crawlers
 Disallow: /backups/
 

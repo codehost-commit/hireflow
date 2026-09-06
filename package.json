@@ -10,7 +10,11 @@
     "dev:staging": "cd worker && npx wrangler dev --env staging",
     "tail": "cd worker && npx wrangler tail",
     "backup": "bash scripts/backup-kv.sh",
+    "template-previews": "node scripts/generate-template-previews.mjs",
     "secrets:list": "cd worker && npx wrangler secret list",
     "predeploy": "echo '>> Deploying PRODUCTION worker from ./worker (KV 84f236c3). Ctrl-C to abort.' && sleep 3"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
   }
 }
