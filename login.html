@@ -98,7 +98,7 @@
         <p class="auth-aside-sub">Free ATS-optimized resumes that actually land interviews.</p>
         <ul class="auth-trust">
           <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Free forever, no credit card required</li>
-          <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 18 recruiter-tested templates</li>
+          <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> 25 recruiter-tested templates</li>
           <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Data encrypted, never sold</li>
         </ul>
       </div>
@@ -151,52 +151,17 @@
           <label for="su-pw">Password</label>
           <input id="su-pw" type="password" name="password" placeholder="At least 8 characters" minlength="8" autocomplete="new-password" required>
         </div>
-        <div class="form-field">
-          <label for="su-category">What best describes you?</label>
-          <select id="su-category" name="category" required>
-            <option value="" disabled selected>Select one…</option>
-            <option value="student">Student</option>
-            <option value="internship">Internship seeker</option>
-            <option value="no-experience">Entry-level / no experience</option>
-            <option value="software-engineer">Software engineer</option>
-            <option value="finance">Finance</option>
-            <option value="project-manager">Project manager</option>
-            <option value="nurse">Nurse / healthcare</option>
-            <option value="teacher">Teacher / education</option>
-            <option value="career-changer">Career changer</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="su-source">How did you hear about us?</label>
-          <select id="su-source" name="source">
-            <option value="" selected>Optional</option>
-            <option value="Google search">Google search</option>
-            <option value="TikTok">TikTok</option>
-            <option value="Instagram">Instagram</option>
-            <option value="YouTube">YouTube</option>
-            <option value="LinkedIn">LinkedIn</option>
-            <option value="Facebook">Facebook</option>
-            <option value="Reddit">Reddit</option>
-            <option value="ChatGPT or other AI">ChatGPT or other AI</option>
-            <option value="Friend or colleague">Friend or colleague</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-        <!-- Optional, single opt-in for all non-essential contact. Unchecked by default
-             and NOT a condition of signing up. It enumerates each purpose so consent is
-             informed; users can later fine-tune or turn off any one category on the
-             email-preferences page. Kept distinct from the Terms/Privacy line below. -->
-        <label class="consent-opt consent-single"><input type="checkbox" name="consent_all"><span>Email me Applio tips, updates, offers, plus occasional feedback or testimonial invites.</span></label>
+        <!-- Optional, unchecked-by-default marketing consent. Not a condition of signup.
+             Users can fine-tune later on the email-preferences page. -->
+        <label class="consent-opt consent-single"><input type="checkbox" name="consent_all"><span>Send me product tips and updates (optional)</span></label>
         <button type="submit" class="btn btn-primary btn-block">Create free account →</button>
-        <p class="consent-legal">Essential account emails (verification, receipts, security) are always sent and are never promotional. By creating an account you agree to our <a href="/terms">Terms</a> and <a href="/privacy">Privacy Policy</a>.</p>
+        <p class="consent-legal">By creating an account you agree to our <a href="/terms">Terms</a> and <a href="/privacy">Privacy Policy</a>.</p>
       </form>
       <ul class="auth-perks">
-        <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Full resume builder + all 18 templates</li>
+        <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Full resume builder + 25 templates</li>
         <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Free ATS checker &amp; job tracker</li>
-        <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Upgrade only if you want AI, never required</li>
+        <li><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Upgrade only if you want AI</li>
       </ul>
-      <p class="auth-socialproof">Join job seekers landing more interviews with Applio</p>
     </div>
     </div><!-- /.auth-card -->
   </div><!-- /.auth-split -->

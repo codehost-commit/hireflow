@@ -1383,3 +1383,43 @@ section[id] { scroll-margin-top: 80px; }
   .sm-bar-fill { transition:none; }
   .spot-mock:hover .spot-card { transform:none; }
 }
+
+/* ============ HERO STATS STRIP ============
+   Dark full-width strip pinned directly under the hero. Real numbers only.
+   Numbers animate in via data-magic-ticker (js/magic.js). */
+.hero-stats {
+  background: linear-gradient(180deg, #07091a 0%, #0d1130 100%);
+  border-top: 1px solid rgba(255,255,255,.06);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  padding: 32px 20px;
+  position: relative;
+  z-index: 2;
+}
+.hero-stats .hs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+.hs-item { text-align: center; }
+.hs-num {
+  font-size: clamp(28px, 3.6vw, 40px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+.hs-num .hs-suffix { color: #a5b4fc; font-weight: 700; }
+.hs-label {
+  font-size: 13px;
+  color: rgba(255,255,255,.62);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+@media (max-width: 720px) {
+  .hero-stats .hs-grid { grid-template-columns: repeat(2, 1fr); gap: 24px 16px; }
+  .hero-stats { padding: 24px 16px; }
+}
