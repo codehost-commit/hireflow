@@ -1423,3 +1423,81 @@ section[id] { scroll-margin-top: 80px; }
   .hero-stats .hs-grid { grid-template-columns: repeat(2, 1fr); gap: 24px 16px; }
   .hero-stats { padding: 24px 16px; }
 }
+
+/* ============ LIVE ATS DEMO SECTION ============
+   Homepage inline scorer using ats-engine.js. Dark section, matches hero
+   palette. See index.html #try-it. */
+.live-ats { padding: 96px 40px; }
+.live-ats .container { max-width: 960px; }
+.lats-wrap {
+  margin-top: 32px;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 20px;
+  padding: 32px;
+  backdrop-filter: blur(8px);
+}
+.lats-inputs { display: grid; gap: 16px; }
+.lats-field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,.85);
+  margin-bottom: 6px;
+}
+.lats-field .lats-hint { color: rgba(255,255,255,.5); font-weight: 400; }
+.lats-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 110px;
+  padding: 12px 14px;
+  background: rgba(255,255,255,.04);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 13.5px;
+  line-height: 1.55;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color .18s, box-shadow .18s, background .18s;
+}
+.lats-field textarea:focus {
+  outline: none;
+  border-color: #5b54e8;
+  background: rgba(255,255,255,.06);
+  box-shadow: 0 0 0 3px rgba(91,84,232,.18);
+}
+.lats-inputs > .btn { margin-top: 8px; align-self: start; padding: 14px 28px; }
+
+.lats-result {
+  margin-top: 28px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(255,255,255,.10);
+}
+.lats-score-block { display: flex; align-items: center; gap: 24px; margin-bottom: 24px; }
+.lats-score-ring { position: relative; flex-shrink: 0; }
+.lats-score-num {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 34px; font-weight: 800; color: #5b54e8;
+  font-variant-numeric: tabular-nums;
+}
+.lats-score-verdict { flex: 1; min-width: 0; }
+.lats-score-label { font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 4px; letter-spacing: -0.02em; }
+.lats-score-sub { font-size: 14px; color: rgba(255,255,255,.68); line-height: 1.5; }
+
+.lats-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 24px; margin-bottom: 24px; }
+.lats-bar-label { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: rgba(255,255,255,.82); margin-bottom: 6px; }
+.lats-bar-track { height: 6px; background: rgba(255,255,255,.08); border-radius: 6px; overflow: hidden; }
+.lats-bar-fill { height: 100%; border-radius: 6px; transition: width .7s cubic-bezier(.2,.9,.3,1); }
+
+.lats-cta { text-align: center; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.10); }
+.lats-cta .btn { padding: 14px 32px; font-size: 15px; }
+.lats-cta-sub { font-size: 12.5px; color: rgba(255,255,255,.5); margin-top: 10px; }
+
+@media (max-width: 720px) {
+  .live-ats { padding: 64px 20px; }
+  .lats-wrap { padding: 20px; }
+  .lats-bars { grid-template-columns: 1fr; }
+  .lats-score-block { flex-direction: column; align-items: flex-start; gap: 16px; text-align: left; }
+}

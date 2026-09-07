@@ -352,6 +352,53 @@
   </div>
 </section>
 
+<!-- ============ LIVE ATS DEMO ============
+     Users paste a resume + optional job description and get a real ATS score
+     inline. Runs entirely in the browser via ats-engine.js (no auth, no
+     network). Signup CTA stashes their pasted text so the editor auto-imports
+     it — same funnel as the /ats-checker tool. -->
+<section class="section-alt live-ats" id="try-it">
+  <div class="container">
+    <h2 class="section-title light">See your resume's ATS score in 30 seconds</h2>
+    <p class="section-sub" style="color:rgba(255,255,255,.7)">Paste your resume and (optionally) a job description. Instant 0-100 score. No sign-up.</p>
+    <div class="lats-wrap">
+      <div class="lats-inputs">
+        <div class="lats-field">
+          <label for="lats-resume">Your resume <span class="lats-hint">(paste as text)</span></label>
+          <textarea id="lats-resume" placeholder="Paste your resume here..." autocomplete="off"></textarea>
+        </div>
+        <div class="lats-field">
+          <label for="lats-jd">Job description <span class="lats-hint">(optional, boosts accuracy)</span></label>
+          <textarea id="lats-jd" placeholder="Paste the job posting for a targeted score..." autocomplete="off"></textarea>
+        </div>
+        <button class="btn btn-primary btn-lg" id="lats-run" type="button">Score my resume →</button>
+      </div>
+      <div class="lats-result" id="lats-result" aria-live="polite" hidden>
+        <div class="lats-score-block">
+          <div class="lats-score-ring">
+            <svg viewBox="0 0 100 100" width="120" height="120">
+              <circle cx="50" cy="50" r="44" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="8"/>
+              <circle id="lats-ring-fill" cx="50" cy="50" r="44" fill="none" stroke="#5b54e8" stroke-width="8"
+                stroke-dasharray="276.5" stroke-dashoffset="276.5" stroke-linecap="round"
+                transform="rotate(-90 50 50)" style="transition:stroke-dashoffset .9s cubic-bezier(.2,.9,.3,1),stroke .3s"/>
+            </svg>
+            <div class="lats-score-num" id="lats-score-num">0</div>
+          </div>
+          <div class="lats-score-verdict">
+            <div class="lats-score-label" id="lats-score-label">Ready to score</div>
+            <div class="lats-score-sub" id="lats-score-sub">Fixing your resume takes minutes, not hours.</div>
+          </div>
+        </div>
+        <div class="lats-bars" id="lats-bars"></div>
+        <div class="lats-cta">
+          <a href="/login?mode=signup" class="btn btn-primary btn-lg" id="lats-cta-btn">See specific fixes free →</a>
+          <p class="lats-cta-sub">We'll import what you pasted so you start with your real resume.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ TEMPLATE PROOF ============ -->
 <style>
   #templates .tpl-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:26px; max-width:1040px; margin:22px auto 0; }
@@ -936,7 +983,98 @@
 <script src="js/plan.js"></script>
 <script src="js/waves.js"></script>
 <script src="js/home.js"></script>
+<script src="js/ats-engine.js"></script>
 <script src="js/magic.js" defer></script>
+<script>
+// ============ LIVE ATS DEMO ============
+// Wires the /try-it section on the homepage to ats-engine.js. Fully client-side
+// scoring; on run, unhides the result panel, animates the ring, populates the
+// breakdown bars, and stashes the pasted text so signup auto-imports it (same
+// pattern as /ats-checker).
+(function () {
+  var runBtn = document.getElementById('lats-run');
+  if (!runBtn) return;
+  var resumeEl = document.getElementById('lats-resume');
+  var jdEl = document.getElementById('lats-jd');
+  var resultEl = document.getElementById('lats-result');
+  var scoreNum = document.getElementById('lats-score-num');
+  var scoreLabel = document.getElementById('lats-score-label');
+  var scoreSub = document.getElementById('lats-score-sub');
+  var ringFill = document.getElementById('lats-ring-fill');
+  var barsEl = document.getElementById('lats-bars');
+  var ctaBtn = document.getElementById('lats-cta-btn');
+  var CIRC = 276.5;
+
+  function verdict(s) {
+    if (s >= 80) return { label: 'Strong', sub: 'Recruiter-ready. Tailor it for each application to hit interviews.' };
+    if (s >= 65) return { label: 'Solid, a few tweaks away', sub: 'Close. Fix the weak categories below to break past 80.' };
+    if (s >= 45) return { label: 'Needs work', sub: 'Fixable in minutes with the right guidance. See what to change.' };
+    return { label: 'Major gaps', sub: 'ATS is likely filtering you out. The good news: every issue below has a fix.' };
+  }
+  function color(s) { return s >= 75 ? '#22c55e' : s >= 50 ? '#f59e0b' : '#ef4444'; }
+
+  function animateNumber(el, target, dur) {
+    var start = performance.now();
+    function step(now) {
+      var t = Math.min(1, (now - start) / dur);
+      var eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = Math.round(target * eased);
+      if (t < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function run() {
+    var resume = (resumeEl.value || '').trim();
+    if (resume.length < 60) {
+      alert('Paste at least a paragraph of your resume to get an accurate score.');
+      resumeEl.focus();
+      return;
+    }
+    if (!window.AtsEngine) { alert('Scoring engine is still loading. Try again in a second.'); return; }
+    var jd = (jdEl.value || '').trim();
+    var res = window.AtsEngine.score(resume, jd);
+
+    resultEl.hidden = false;
+    var c = color(res.score);
+    var v = verdict(res.score);
+    scoreLabel.textContent = v.label;
+    scoreSub.textContent = v.sub;
+    ringFill.setAttribute('stroke', c);
+    ringFill.style.strokeDashoffset = String(CIRC - (CIRC * res.score / 100));
+    scoreNum.style.color = c;
+    animateNumber(scoreNum, res.score, 900);
+
+    var b = res.breakdown;
+    var rows = [
+      { name: 'Keywords',       val: b.keywords },
+      { name: 'Formatting',     val: b.formatting },
+      { name: 'Quantified impact', val: b.impact },
+      { name: 'Completeness',   val: b.completeness }
+    ];
+    barsEl.innerHTML = rows.map(function (r) {
+      var pct = Math.round(r.val);
+      var bc = pct >= 75 ? '#22c55e' : pct >= 50 ? '#f59e0b' : '#ef4444';
+      return '<div class="lats-bar-row">' +
+        '<div class="lats-bar-label"><span>' + r.name + '</span><span style="color:' + bc + '">' + pct + '/100</span></div>' +
+        '<div class="lats-bar-track"><div class="lats-bar-fill" style="width:' + pct + '%;background:' + bc + '"></div></div>' +
+      '</div>';
+    }).join('');
+
+    // Scroll the result into view so users see it below their scroll position.
+    setTimeout(function () { resultEl.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
+
+    // Stash pasted text for the editor auto-import on signup.
+    try {
+      if (resume) localStorage.setItem('hf_pending_import', resume.slice(0, 20000));
+      if (jd) localStorage.setItem('hf_pending_jd', jd.slice(0, 8000));
+    } catch (_) {}
+    ctaBtn.href = '/login?mode=signup&from=hero_ats';
+  }
+
+  runBtn.addEventListener('click', run);
+})();
+</script>
 <script>
 // ===== Glowing border effect driver (vanilla port of Aceternity GlowingEffect) =====
 // Each template card's border highlight points toward the cursor and fades in when the
