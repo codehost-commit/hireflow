@@ -34,6 +34,7 @@ const PORT = 4321;
 // server, waitFor = optional selector to wait for before capture (for pages
 // that render content via JS).
 const PAGES = [
+  { slug: 'home',         path: '/',                        waitFor: '.hero-title' },
   { slug: 'tools',        path: '/tools/',                  waitFor: '.tl-card' },
   { slug: 'ats-checker',  path: '/ats-checker',             waitFor: '.ac-hero' },
   { slug: 'examples',     path: '/resume-examples/',        waitFor: null },

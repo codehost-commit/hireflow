@@ -9,12 +9,14 @@
 <meta property="og:title" content="Applio: The Free AI Resume Builder That Gets You Interviews">
 <meta property="og:description" content="Build a recruiter-ready, ATS-optimized resume in minutes. Applio's AI tailors it to any job and scores it against the filters, grounded in your real experience. Free forever plan.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://appliohq.com/logo.jpeg">
+<meta property="og:image" content="https://appliohq.com/img/screens/home.png">
+<meta property="og:image:width" content="2400">
+<meta property="og:image:height" content="1600">
 <meta property="og:url" content="https://appliohq.com/">
 <meta name="twitter:title" content="Applio: The Free AI Resume Builder That Gets You Interviews">
 <meta name="twitter:description" content="Build a recruiter-ready, ATS-optimized resume in minutes. Applio's AI tailors it to any job and scores it against the filters, grounded in your real experience. Free forever plan.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://appliohq.com/logo.jpeg">
+<meta name="twitter:image" content="https://appliohq.com/img/screens/home.png">
 <link rel="icon" href="logo.ico">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#6366f1">
@@ -827,7 +829,7 @@
         <div class="price"><span class="price-num">$0</span><span class="price-period">forever</span></div>
         <p class="price-sub">Perfect for getting started</p>
         <ul class="price-list">
-          <li>✓ Resume Builder (all 18 templates)</li>
+          <li>✓ Resume Builder (all 25 templates)</li>
           <li>✓ AI resume import (PDF, DOCX, TXT)</li>
           <li>✓ Job Tracker</li>
           <li>✓ 10 PDF downloads per month</li>
@@ -865,8 +867,68 @@
       <div class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg> Your data never sold</div>
       <div class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> 7-day money-back</div>
     </div>
+
+    <!-- Feature comparison matrix — shows every plan side-by-side.
+         Additive; the cards above stay the primary CTA path. -->
+    <div class="price-matrix-wrap">
+      <h3 class="price-matrix-title">Compare every feature</h3>
+      <div class="price-matrix-scroll">
+        <table class="price-matrix" aria-label="Feature comparison across plans">
+          <thead>
+            <tr>
+              <th scope="col" class="pm-feat-col">Feature</th>
+              <th scope="col">Free</th>
+              <th scope="col" class="pm-featured">Premium <small>$4.99/mo</small></th>
+              <th scope="col" class="pm-featured">Lifetime <small>$39.99 once</small></th>
+            </tr>
+          </thead>
+          <tbody id="price-matrix-body"></tbody>
+        </table>
+      </div>
+      <div style="text-align:center; margin-top: 20px;">
+        <a href="pricing" class="btn btn-primary btn-lg">Choose your plan →</a>
+      </div>
+    </div>
   </div>
 </section>
+
+<script>
+// Feature comparison matrix. Rows are the actual shipped features; cells use
+// ✓ / ✕ / text values. Rendered inline so a single edit updates the table.
+(function () {
+  var tbody = document.getElementById('price-matrix-body');
+  if (!tbody) return;
+  var OK = '<span class="pm-mk pm-mk-ok" aria-label="Included">✓</span>';
+  var NO = '<span class="pm-mk pm-mk-no" aria-label="Not included">✕</span>';
+  // [feature, free, premium, lifetime]
+  var ROWS = [
+    ['All 25 ATS-friendly templates', OK, OK, OK],
+    ['Resume import (PDF, DOCX, TXT)', OK, OK, OK],
+    ['PDF, HTML, TXT export', '10 / month', 'Unlimited', 'Unlimited'],
+    ['Job application tracker', OK, OK, OK],
+    ['AI interview prep + voice mock', OK, OK, OK],
+    ['Cover letter maker', '2 free', 'Unlimited', 'Unlimited'],
+    ['AI Tailor to job description', NO, OK, OK],
+    ['ATS Check &amp; Score', NO, OK, OK],
+    ['AI Resume Analysis + Improvements', NO, OK, OK],
+    ['AI Bullet Improvements', NO, OK, OK],
+    ['Career Coach chat', NO, OK, OK],
+    ['Application Autopilot', NO, OK, OK],
+    ['Skill Gap Coach', OK, OK, OK],
+    ['Win Journal + Brag Doc', OK, OK, OK],
+    ['First 90 Days plan', OK, OK, OK],
+    ['Billing', 'Free forever', 'Monthly, cancel anytime', 'One-time payment']
+  ];
+  tbody.innerHTML = ROWS.map(function (r) {
+    return '<tr>' +
+      '<th scope="row" class="pm-feat">' + r[0] + '</th>' +
+      '<td>' + r[1] + '</td>' +
+      '<td class="pm-featured">' + r[2] + '</td>' +
+      '<td class="pm-featured">' + r[3] + '</td>' +
+    '</tr>';
+  }).join('');
+})();
+</script>
 
 <!-- ============ FAQ ============ -->
 <section class="section-alt" id="faq">
